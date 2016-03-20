@@ -52,6 +52,11 @@ return __singleton__; \
 
 // http completion block
 typedef void(^CompletionBlock)(id aResultObject, NSError* anError, id anExtraData);
+#ifdef DEBUG
+# define NSLog(...) NSLog(__VA_ARGS__)
+#else
+#define NSLog(...) {}
+#endif
 
 #define WEAK_SELF __weak typeof(self)weakSelf = self
 #define STRONG_SELF __strong typeof(weakSelf)self = weakSelf

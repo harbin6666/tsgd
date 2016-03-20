@@ -50,7 +50,21 @@
 
 
 +(void)requestFunc:(NSString*)funName WithParam:(NSMutableDictionary*)param withCompletBlcok:(compBlock)block{
-    [param setObject:@2 forKey:@"PfType"];
+
+    [param setObject:@"2" forKey:@"PfType"];
+    [param setObject:[[[UIDevice currentDevice] identifierForVendor] UUIDString] forKey:@"DeviceId"];
+
+    if (GLOBALVALUE.targetType==kRw) {
+        [param setObject:@"4" forKey:@"AppType"];
+    }else if (GLOBALVALUE.targetType==kTs){
+        [param setObject:@"2" forKey:@"AppType"];
+    }else{
+        [param setObject:@"3" forKey:@"AppType"];
+    }
+    if (GLOBALVALUE.loginedUserName!=nil) {
+        [param setObject:GLOBALVALUE.loginedUserName forKey:@"UserId"];
+    }
+    
     NSString *ser=nil;
     NSString *fun=nil;
     if (GLOBALVALUE.targetType==kRw) {

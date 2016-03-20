@@ -9,6 +9,7 @@
 #import "GDLoginVC.h"
 #import "AppDelegate.h"
 #import "Global.h"
+#import "NSData+DES.h"
 @interface GDLoginVC ()
 @property (weak, nonatomic) IBOutlet UITextField *userNameTF;
 @property (weak, nonatomic) IBOutlet UITextField *secretTF;
@@ -35,13 +36,21 @@
     // Do any additional setup after loading the view from its nib.
     UITapGestureRecognizer *ges = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeKeyBoard)];
     [self.view addGestureRecognizer:ges];
-    NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"UserName"];
+    id userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"UserName"];
     if (userName) {
-        self.userNameTF.text = userName;
+        if ([userName isKindOfClass:[NSString class]]) {
+            self.userNameTF.text=userName;
+        }else{
+            self.userNameTF.text = [[NSString alloc] initWithData:[NSData DESDecrypt:userName WithKey:nil] encoding:NSUTF8StringEncoding];
+        }
     }
-    NSString *passWord = [[NSUserDefaults standardUserDefaults] objectForKey:@"PassWord"];
+    id  passWord = [[NSUserDefaults standardUserDefaults] objectForKey:@"PassWord"];
     if (passWord) {
-        self.secretTF.text = passWord;
+        if ([passWord isKindOfClass:[NSString class]]) {
+            self.secretTF.text=passWord;
+        }else{
+            self.secretTF.text = [[NSString alloc] initWithData:[NSData DESDecrypt:passWord WithKey:nil] encoding:NSUTF8StringEncoding];
+        }
         self.rememberPassBtn.selected = YES;
         self.isRememberPass = YES;
     }
@@ -73,8 +82,18 @@
     
 //    [dic setObject:@"liuweiguo" forKey:@"Username"];
 //    [dic setObject:@"Boco1234" forKey:@"Password"];
+    [dic setObject:@"2" forKey:@"PfType"];
+    [dic setObject:[[[UIDevice currentDevice] identifierForVendor] UUIDString] forKey:@"DeviceId"];
     
-    
+    if (GLOBALVALUE.targetType==kRw) {
+        [dic setObject:@"4" forKey:@"AppType"];
+    }else if (GLOBALVALUE.targetType==kTs){
+        [dic setObject:@"2" forKey:@"AppType"];
+    }else{
+        [dic setObject:@"3" forKey:@"AppType"];
+    }
+
+
     [dic setObject:self.userNameTF.text forKey:@"Username"];
     [dic setObject:self.secretTF.text forKey:@"Password"];
     
@@ -229,8 +248,11 @@
         [[NSUserDefaults standardUserDefaults] setObject:__BOOL(NO) forKey:@"isAutoLogin"];
     }
     if (self.isRememberPass) {
-        [[NSUserDefaults standardUserDefaults] setObject:self.userNameTF.text forKey:@"UserName"];
-        [[NSUserDefaults standardUserDefaults] setObject:self.secretTF.text forKey:@"PassWord"];
+        NSData*userNameData=[NSData DESEncrypt:[self.userNameTF.text dataUsingEncoding:NSUTF8StringEncoding] WithKey:nil];
+        NSData*passData=[NSData DESEncrypt:[self.secretTF.text dataUsingEncoding:NSUTF8StringEncoding] WithKey:nil];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:userNameData forKey:@"UserName"];
+        [[NSUserDefaults standardUserDefaults] setObject:passData forKey:@"PassWord"];
     }else{
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"PassWord"];//setObject:__BOOL(YES) forKey:@"ISREMEMBERPASS"];
     }
