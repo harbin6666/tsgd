@@ -115,12 +115,20 @@
                 [self getFreshTime];//只有代办有
             }else if ([result isEqualToString:@"1"]){
                 [self hideLoading];
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"登录失败" message:@"用户不存在" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"登录失败" message:@"用户名或者密码错误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
                 [alert show];
             }
             else if ([result isEqualToString:@"2"]){
                 [self hideLoading];
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"登录失败" message:@"密码不正确" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"登录失败" message:@"用户名或者密码错误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [alert show];
+            }else if ([result isEqualToString:@"3"]){
+                [self hideLoading];
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"登录失败" message:@"账号被锁定" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [alert show];
+            }else if ([result isEqualToString:@"4"]){
+                [self hideLoading];
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"登录失败" message:@"账号目前在线，不允许重复登陆" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
                 [alert show];
             }else{
                 [self hideLoading];
