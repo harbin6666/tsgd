@@ -10,4 +10,5 @@
 
 @interface TodoVC : GDBasedVC
 @property(nonatomic, strong)NSDictionary *searchParam;
+- (void)getData;
 @end

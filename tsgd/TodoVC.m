@@ -65,7 +65,29 @@
     [self getData];
     
 }
+
+-(void)getClientStatus{
+    if (GLOBALVALUE.userZhName==nil||[GLOBALVALUE.userZhName isEqualToString:@""]) {
+        return;
+    }
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    
+    [GDService requestFunc:@"get_client_status" WithParam:dic withCompletBlcok:^(id reObj,NSError* error) {
+        if ([reObj isKindOfClass:[NSDictionary class]]) {
+            if ([reObj[@"Result"] integerValue]==0) {
+                GLOBALVALUE.userZhName=nil;
+                GLOBALVALUE.userZhName =@"";
+                GDLoginVC *loginVC = [[GDLoginVC alloc]init];
+                [self presentViewController:loginVC animated:NO completion:^{
+                    //
+                }];
+            }
+        }
+    }];
+}
+
 - (void)getData{
+    [self getClientStatus];
     if (GLOBALVALUE.userZhName==nil||[GLOBALVALUE.userZhName isEqualToString:@""]) {
         return;
     }
