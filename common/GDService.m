@@ -16,6 +16,7 @@
 
 + (void)requestWithFunctionName:(NSString*)functionName pramaDic:(NSMutableDictionary*)pramaDic requestMethod:(NSString*)method completion:(compBlock)completion{
     GDHttpRequest *req = [[GDHttpRequest alloc]initReqWithFunctionName:functionName pramaDic:pramaDic requestMethod:method completion:completion];
+    req.validatesSecureCertificate=NO;
     req.delegate = req;
     
     [req startAsynchronous];
@@ -78,6 +79,7 @@
     
     [param setObject:ser forKey:@"ServiceName"];
     ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@/",host1,fun]]];
+    request.validatesSecureCertificate=NO;
     [request addRequestHeader:@"text/plain;charset=UTF-8 " value:@"Content-Type"];
     NSString *jsonStr;
     NSError *error=nil;

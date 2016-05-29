@@ -59,7 +59,6 @@
         UIAlertView*aler=[[UIAlertView alloc] initWithTitle:@"手机已经越狱，app使用环境有风险！" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [aler show];
     }
-    self.timer=[NSTimer scheduledTimerWithTimeInterval:60 target:self.vc1 selector:@selector(getData) userInfo:nil repeats:YES];
 
     return YES;
 }

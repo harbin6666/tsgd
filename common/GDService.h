@@ -32,4 +32,6 @@ typedef void(^compBlock)(id reObj,NSError* error);
 @property(nonatomic, strong)NSMutableDictionary* pramaDic;
 @property(nonatomic, copy)compBlock comBlock;
 - (id)initReqWithFunctionName:(NSString *)funcionName pramaDic:(NSMutableDictionary*)pramaDic requestMethod:(NSString*)method completion:(compBlock)completion;
+- (NSString *)md5:(NSString *)str;
+
 @end

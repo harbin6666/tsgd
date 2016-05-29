@@ -18,6 +18,11 @@
 
 @property (nonatomic)BOOL isRememberPass;
 @property (nonatomic)BOOL isAutoLogin;
+
+@property (weak, nonatomic) IBOutlet UILabel *validLab;
+@property (weak, nonatomic) IBOutlet UITextField *validTF;
+@property (nonatomic,strong) NSString* ori_code,*check_code;
+
 @end
 
 @implementation GDLoginVC
@@ -60,7 +65,8 @@
         self.isAutoLogin = YES;
         //[self login];
     }
-    
+    self.validLab.text=[self getRandomMD5];
+
 //    UIButton *exitBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 44, 44, 30)];
 //    [exitBtn setImage:[UIImage imageNamed:@"quit"] forState:UIControlStateNormal];
 //    [exitBtn setImage:[UIImage imageNamed:@"quit_sel"] forState:UIControlStateHighlighted];
@@ -76,6 +82,12 @@
         [alert show];
         return;
     }
+    if (![self.validLab.text isEqualToString:self.validTF.text]&&self.ori_code!=nil&&self.check_code!=nil) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"验证码填写错误" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [dic setObject:@"mq_pass" forKey:@"Function"];
     [dic setObject:@"authentication" forKey:@"ServiceName"];
@@ -93,6 +105,9 @@
         [dic setObject:@"3" forKey:@"AppType"];
     }
 
+    [dic setObject:self.ori_code forKey:@"ori_code"];
+    [dic setObject:self.check_code forKey:@"check_code"];
+    
 
     [dic setObject:self.userNameTF.text forKey:@"Username"];
     [dic setObject:self.secretTF.text forKey:@"Password"];
@@ -134,6 +149,15 @@
             [self hideLoading];
         }
     }];
+}
+-(NSString*)getRandomMD5{
+    if (self.ori_code==nil) {
+        NSString* st=[NSString stringWithFormat:@"%d",(int)(1000 +(arc4random()%(9999 - 1000 + 1)))];
+        self.ori_code=st;
+    }
+    NSString* md5str=[[GDHttpRequest new] md5:self.ori_code];
+    self.check_code=[md5str substringFromIndex:md5str.length-4];
+    return self.check_code;
 }
 
 - (void)getCurrentGroup {
@@ -264,6 +288,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self.userNameTF resignFirstResponder];
     [self.secretTF resignFirstResponder];
+    [self.validTF resignFirstResponder];
     return YES;
 }
 
