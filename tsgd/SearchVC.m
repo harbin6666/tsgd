@@ -34,7 +34,7 @@
     [self.view addSubview:hand];
     y+=35;
 
-    hand=[[HandleView alloc] initWithType:kBtn key:@"开始时间" Value:self.endDate tag:2 block:^(id sender, UIButton *yuyin) {
+    hand=[[HandleView alloc] initWithType:kBtn key:@"结束时间" Value:self.endDate tag:2 block:^(id sender, UIButton *yuyin) {
         self.endBtn=(UIButton*)sender;
         [self.endBtn addTarget:self action:@selector(dateClick:) forControlEvents:UIControlEventTouchUpInside];
     }];
